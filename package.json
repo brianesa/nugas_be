@@ -16,5 +16,8 @@
     "mongoose": "^5.12.7",
     "socket.io": "^2.4.1"
   },
+  "engines": {
+    "node": "15.3.0"
+  },
   "type": "module"
 }
