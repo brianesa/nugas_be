@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
     console.log(msg);
     TaskSchema.find().then((data) => {
       io.emit('task_added', {
-        id: msg,
+        id: msg, 
         data
       });
     });
