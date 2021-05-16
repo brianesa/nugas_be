@@ -10,6 +10,15 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import { body, validationResult } from 'express-validator'
 import path from 'path'
+var cors = require('cors');
+
+app.use(
+    cors({
+        credentials: true,
+        origin: true
+    })
+);
+app.options('*', cors());
 
 const __dirname = path.resolve(path.dirname(''));
 app.use(express.urlencoded({ extended: true }))
