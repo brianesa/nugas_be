@@ -13,10 +13,10 @@ import path from 'path'
 var cors = require('cors');
 
 app.use(
-    cors({
-        credentials: true,
-        origin: true
-    })
+  cors({
+    credentials: true,
+    origin: true
+  })
 );
 app.options('*', cors());
 
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
     console.log(msg);
     TaskSchema.find().then((data) => {
       io.emit('task_added', {
-        id: msg, 
+        id: msg,
         data
       });
     });
@@ -63,8 +63,14 @@ var taskSchema = new Schema({
   description: String
 })
 
+var configSchema = new Schema({
+  version: String,
+  id: String
+})
+
 var RegistrationSchema = mongoose.model("registrations", registrationSchema)
 var TaskSchema = mongoose.model("tasks", taskSchema)
+var ConfigSchema = mongoose.model("configs", configSchema)
 
 app.post('/login', async (req, res) => {
   const email = await RegistrationSchema.findOne({ $or: [{ email: req.body.user }, { id: req.body.user }] })
@@ -247,8 +253,7 @@ app.patch('/update-customer',
 
 app.delete('/delete-task',
   async (req, res) => {
-    console.log('masuk');
-    const doc = await TaskSchema.findByIdAndDelete(
+    await TaskSchema.findByIdAndDelete(
       {
         _id: req.body.taskId
       }
@@ -259,6 +264,13 @@ app.delete('/delete-task',
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
+});
+
+app.get('/config', async (req, res) => {
+  const result = await ConfigSchema.findOne(
+    {id: 'config'}
+  )
+  res.json(result)
 });
 
 http.listen(port, () => {
