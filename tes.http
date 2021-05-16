@@ -1,0 +1,62 @@
+POST  http://localhost:3000/login
+content-type: application/json
+
+{
+    "user": "sdfsdfsde2@mail.com",
+    "password": "tes2esd"
+}
+
+###
+
+POST  http://localhost:3000/register
+content-type: application/json
+
+{
+    "name": "brain",
+    "email": "sd@mail.com",
+    "password": "tes2esd",
+    "phoneNumber": "1223223433",
+    "id": "idw2d32w5"
+}
+
+###
+
+POST  http://localhost:3000/add-task
+content-type: application/json
+
+{
+    "title": "halo bro",
+    "description": "ciba",
+    "id": "12"
+}
+
+###
+
+PATCH  http://localhost:3000/update-task
+content-type: application/json
+
+{
+    "title": "sdfsdfsde2@mail.com",
+    "description": "tes2esd",
+    "id": "1",
+    "taskId": "609c0f2eeb082d0f874cf8fd"
+}
+
+###
+
+DELETE  http://localhost:3000/delete-task
+content-type: application/json
+
+{
+    "taskId": "609c0f2eeb082d0f874cf8fd"
+}
+
+###
+
+PATCH  http://localhost:3000/update-customer?method=delete
+content-type: application/json
+
+{
+    "id": "idw2w",
+    "connections": ["tes", "bre"]
+}
