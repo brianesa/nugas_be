@@ -60,3 +60,14 @@ content-type: application/json
     "id": "idw2w",
     "connections": ["tes", "bre"]
 }
+
+###
+
+POST  http://localhost:3000/add-comment
+content-type: application/json
+
+{
+    "taskId": "60a6925ce07c8b281b11dea2",
+    "comment": "baru lagiasddsf",
+    "userId": "cik123"
+}

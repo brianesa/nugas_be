@@ -27,10 +27,18 @@ app.use(express.static(path.join(__dirname, '/')))
 
 io.on("connection", (socket) => {
   socket.on('add_task', (msg) => {
-    console.log(msg);
     TaskSchema.find().then((data) => {
       io.emit('task_added', {
         id: msg,
+        data
+      });
+    });
+  });
+
+  socket.on('add_comment', (msg) => {
+    CommentSchema.find().then((data) => {
+      io.emit('comment_added', {
+        msg,
         data
       });
     });
@@ -68,9 +76,17 @@ var configSchema = new Schema({
   id: String
 })
 
+var commentSchema = new Schema({
+  taskId: String,
+  comment: String,
+  commenter: String,
+  userId: String
+})
+
 var RegistrationSchema = mongoose.model("registrations", registrationSchema)
 var TaskSchema = mongoose.model("tasks", taskSchema)
 var ConfigSchema = mongoose.model("configs", configSchema)
+var CommentSchema = mongoose.model("comments", commentSchema)
 
 app.post('/login', async (req, res) => {
   const email = await RegistrationSchema.findOne({ $or: [{ email: req.body.user }, { id: req.body.user }] })
@@ -262,13 +278,51 @@ app.delete('/delete-task',
     return res.json({ 'data': true })
   })
 
+app.delete('/delete-comment',
+  async (req, res) => {
+    await CommentSchema.findByIdAndDelete(
+      {
+        _id: req.body.commentId
+      }
+    )
+
+    return res.json({ 'data': true })
+  })
+
+app.post('/add-comment',
+  body('taskId').isString().isLength({ min: 1 }),
+  async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array() })
+    }
+    const user = await RegistrationSchema.findOne({
+      id: req.body.userId
+    })
+    console.log(user.name);
+    var newComment = new CommentSchema({
+      'taskId': req.body.taskId,
+      'comment': req.body.comment,
+      'commenter': user.name,
+      'userId': user.id
+    })
+
+    newComment.save(function (error, data) {
+      console.log(data);
+      if (error)
+        return res.send(error)
+
+      return res.json({ 'data': true })
+    });
+  })
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
 });
 
 app.get('/config', async (req, res) => {
   const result = await ConfigSchema.findOne(
-    {id: 'config'}
+    { id: 'config' }
   )
   res.json(result)
 });
