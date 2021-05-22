@@ -26,11 +26,13 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, '/')))
 
 io.on("connection", (socket) => {
-  socket.on('add_task', (msg) => {
+  socket.on('add_task', async (msg) => {
+    const user = await RegistrationSchema.find();
     TaskSchema.find().then((data) => {
       io.emit('task_added', {
         id: msg,
-        data
+        data,
+        user
       });
     });
   });
@@ -68,7 +70,8 @@ var registrationSchema = new Schema({
 var taskSchema = new Schema({
   id: String,
   title: String,
-  description: String
+  description: String,
+  maxTime: Date
 })
 
 var configSchema = new Schema({
@@ -181,7 +184,8 @@ app.post('/add-task',
     var newTask = new TaskSchema({
       'id': req.body.id,
       'title': req.body.title,
-      'description': req.body.description
+      'description': req.body.description,
+      'maxTime':  req.body.maxTime
     })
 
     newTask.save(function (error, data) {
