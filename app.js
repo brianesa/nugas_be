@@ -72,7 +72,11 @@ var taskSchema = new Schema({
   title: String,
   description: String,
   maxTime: Date
-})
+},
+  {
+    timestamps: true
+  }
+)
 
 var configSchema = new Schema({
   version: String,
@@ -185,7 +189,7 @@ app.post('/add-task',
       'id': req.body.id,
       'title': req.body.title,
       'description': req.body.description,
-      'maxTime':  req.body.maxTime
+      'maxTime': req.body.maxTime
     })
 
     newTask.save(function (error, data) {
