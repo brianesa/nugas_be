@@ -71,7 +71,8 @@ var taskSchema = new Schema({
   id: String,
   title: String,
   description: String,
-  maxTime: Date
+  maxTime: Date,
+  name: String
 },
   {
     timestamps: true
@@ -185,11 +186,20 @@ app.post('/add-task',
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() })
     }
+    const user = await RegistrationSchema.findOne(
+      {
+        id: req.body.id
+      }
+    )
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' })
+    }
     var newTask = new TaskSchema({
       'id': req.body.id,
       'title': req.body.title,
       'description': req.body.description,
-      'maxTime': req.body.maxTime
+      'maxTime': req.body.maxTime,
+      'name': user.name
     })
 
     newTask.save(function (error, data) {
