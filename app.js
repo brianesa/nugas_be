@@ -334,6 +334,29 @@ app.post('/add-comment',
     });
   })
 
+app.patch('/update-profile',
+  async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array() })
+    }
+    const user = await RegistrationSchema.findOneAndUpdate(
+      {
+        id: req.body.id
+      },
+      {
+        'name': req.body.name
+      },
+      { new: true },
+    )
+    if (!user) {
+      return res.status(404).json({ 'error': 'user not found' })
+    }
+    console.log(user);
+
+    return res.json({ 'data': true })
+  })
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html')
 });

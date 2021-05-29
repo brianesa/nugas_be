@@ -27,7 +27,7 @@ content-type: application/json
 {
     "title": "halo bro",
     "description": "ciba",
-    "id": "pochinki",
+    "id": "brian12345",
     "maxTime": "2021-05-22 06:39:00.000Z"
 }
 
@@ -71,4 +71,14 @@ content-type: application/json
     "taskId": "60a6925ce07c8b281b11dea2",
     "comment": "baru lagiasddsf",
     "userId": "cik123"
+}
+
+###
+
+PATCH  http://localhost:3000/update-profile
+content-type: application/json
+
+{
+    "id": "iffsd",
+    "name": "baru lagiasddsf"
 }
