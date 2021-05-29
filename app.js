@@ -350,7 +350,22 @@ app.patch('/update-profile',
     }
     console.log(user);
 
-    return res.json({ 'data': true })
+    const updatedUser = {
+      name: user.name,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      id: user.id,
+      connections: user.connections
+    }
+    const result = jwt.sign(updatedUser, user.password, (error, token) => {
+      if (error) {
+        return res.json({ error: 'error ketika membuat token' });
+      }
+      res.json({
+        token
+      });
+    })
+    return result
   })
 
 app.get('/', (req, res) => {
