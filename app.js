@@ -345,6 +345,15 @@ app.patch('/update-profile',
       },
       { new: true },
     )
+    const task = await TaskSchema.findOneAndUpdate(
+      {
+        id: req.body.id
+      },
+      {
+        'name': req.body.name
+      },
+      { new: true },
+    )
     if (!user) {
       return res.status(404).json({ 'error': 'user not found' })
     }
