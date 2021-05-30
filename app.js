@@ -355,7 +355,7 @@ app.patch('/update-profile',
     )
     await CommentSchema.updateMany(
       {
-        id: req.body.id
+        userId: req.body.id
       },
       {
         'commenter': req.body.name

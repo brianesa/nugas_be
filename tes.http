@@ -79,6 +79,6 @@ PATCH  http://localhost:3000/update-profile
 content-type: application/json
 
 {
-    "id": "iffsd",
-    "name": "baru lagiasddsf"
+    "id": "pochinki",
+    "name": "1"
 }
