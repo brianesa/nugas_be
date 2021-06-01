@@ -82,3 +82,15 @@ content-type: application/json
     "id": "pochinki",
     "name": "1"
 }
+
+###
+
+PATCH  http://localhost:3000/change-password
+content-type: application/json
+
+{
+    "id": "es123",
+    "email": "es1@ma.com",
+    "password": "tes2esf",
+    "phoneNumber": "234353446"
+}

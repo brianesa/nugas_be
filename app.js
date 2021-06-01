@@ -12,6 +12,11 @@ import { body, validationResult } from 'express-validator'
 import path from 'path'
 var cors = require('cors');
 
+process.on('uncaughtException', function (err) {
+  console.error(err);
+  console.log("Node NOT Exiting...");
+});
+
 app.use(
   cors({
     credentials: true,
@@ -382,6 +387,43 @@ app.patch('/update-profile',
       });
     })
     return result
+  })
+
+app.patch('/change-password',
+  async (req, res) => {
+    const user = await RegistrationSchema.findOne(
+      {
+        $and: [
+          {
+            id: req.body.id,
+          },
+          {
+            email: req.body.email,
+          },
+          {
+            phoneNumber: req.body.phoneNumber,
+          }
+        ]
+      }
+    )
+    console.log(user);
+    if (!user) {
+      res.status(404).json({ error: 'user not found' })
+    }
+    const salt = bcrypt.genSaltSync(10)
+    const password = bcrypt.hashSync(req.body.password, salt)
+
+    await RegistrationSchema.findOneAndUpdate(
+      {
+        id: req.body.id,
+      },
+      {
+        password: password
+      },
+      { new: true }
+    )
+
+    return res.json({ 'data': true })
   })
 
 app.get('/', (req, res) => {
