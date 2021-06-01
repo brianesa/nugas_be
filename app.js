@@ -390,7 +390,12 @@ app.patch('/update-profile',
   })
 
 app.patch('/change-password',
+  body('password').isString().isLength({ min: 5 }).withMessage('password minimal 5 karakter'),
   async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array() })
+    }
     const user = await RegistrationSchema.findOne(
       {
         $and: [
